@@ -96,7 +96,11 @@ describe('OllamaProvider', () => {
       expect(models).toHaveLength(2);
       expect(models[0].id).toBe('llama2');
       expect(models[1].id).toBe('codellama');
-      expect(fetch).toHaveBeenCalledWith('http://localhost:11434/api/tags');
+      expect(fetch).toHaveBeenCalledWith('http://localhost:11434/api/tags', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     });
 
     it('should handle API errors gracefully', async () => {

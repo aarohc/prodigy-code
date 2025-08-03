@@ -251,5 +251,35 @@ describe('OllamaProvider Bearer Token', () => {
         })
       );
     });
+
+    it('should include app key and secret in token requests when set', async () => {
+      const tokenUrl = 'https://example.com/token';
+      const mockToken = 'app-authenticated-token';
+      const appKey = 'test-app-key';
+      const appSecret = 'test-app-secret';
+      
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockToken,
+      });
+
+      provider.setTokenUrl(tokenUrl);
+      provider.setAppKey(appKey);
+      provider.setAppSecret(appSecret);
+      
+      // Access private method for testing
+      const getBearerToken = (provider as any).getBearerToken.bind(provider);
+      const token = await getBearerToken();
+      
+      expect(mockFetch).toHaveBeenCalledWith(tokenUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-Key': appKey,
+          'X-App-Secret': appSecret,
+        },
+      });
+      expect(token).toBe(mockToken);
+    });
   });
 }); 

@@ -4,6 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Mock the oauth2 module to avoid environment variable issues
+vi.mock('./oauth2.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./oauth2.js')>();
+  return {
+    ...actual,
+    getOauthClient: vi.fn().mockResolvedValue({
+      getAccessToken: vi.fn().mockResolvedValue({ token: 'test-token' }),
+      setCredentials: vi.fn(),
+      on: vi.fn(),
+      getTokenInfo: vi.fn(),
+    }),
+  };
+});
+
 import {
   describe,
   it,
@@ -40,6 +54,8 @@ vi.mock('open');
 vi.mock('crypto');
 vi.mock('node:readline');
 
+
+
 const mockConfig = {
   getNoBrowser: () => false,
   getProxy: () => 'http://test.proxy.com:8080',
@@ -69,6 +85,8 @@ describe('oauth2', () => {
     delete process.env.CLOUD_SHELL;
     delete process.env.GOOGLE_GENAI_USE_GCA;
     delete process.env.GOOGLE_CLOUD_ACCESS_TOKEN;
+    delete process.env.OAUTH_CLIENT_ID;
+    delete process.env.OAUTH_CLIENT_SECRET;
     processExitSpy.mockRestore();
   });
 

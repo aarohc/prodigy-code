@@ -96,11 +96,16 @@ export class OllamaProvider implements IProvider {
   private tokenUrl?: string;
   private cachedToken?: string;
   private tokenExpiry?: number;
+  private appKey?: string;
+  private appSecret?: string;
 
   constructor(baseURL?: string, config?: IProviderConfig, apiKey?: string) {
     this.baseURL = baseURL || 'http://localhost:11434';
     this.config = config;
     this.apiKey = apiKey;
+    // Load app_key and secret from environment variables
+    this.appKey = process.env.OLLAMA_APP_KEY;
+    this.appSecret = process.env.OLLAMA_APP_SECRET;
   }
 
   /**
@@ -119,11 +124,21 @@ export class OllamaProvider implements IProvider {
     }
 
     try {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+
+      // Add app_key and secret as headers if available
+      if (this.appKey) {
+        headers['X-App-Key'] = this.appKey;
+      }
+      if (this.appSecret) {
+        headers['X-App-Secret'] = this.appSecret;
+      }
+
       const response = await fetch(this.tokenUrl, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
       });
 
       if (!response.ok) {
@@ -455,6 +470,22 @@ export class OllamaProvider implements IProvider {
 
   setApiKey(apiKey: string): void {
     this.apiKey = apiKey;
+  }
+
+  setAppKey(appKey: string): void {
+    this.appKey = appKey;
+  }
+
+  setAppSecret(appSecret: string): void {
+    this.appSecret = appSecret;
+  }
+
+  getAppKey(): string | undefined {
+    return this.appKey;
+  }
+
+  getAppSecret(): string | undefined {
+    return this.appSecret;
   }
 
   setBaseUrl(baseUrl?: string): void {

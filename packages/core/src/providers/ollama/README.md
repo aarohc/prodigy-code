@@ -60,7 +60,16 @@ The Ollama provider is automatically registered when you start LLxprt Code. You 
 ```bash
 # Set custom Ollama base URL (default: http://localhost:11434)
 export OLLAMA_BASE_URL=http://localhost:11434
+
+# Set API key for authentication (optional)
+export OLLAMA_API_KEY=your-api-key
+
+# Set app key and secret for token generation (optional)
+export OLLAMA_APP_KEY=your-app-key
+export OLLAMA_APP_SECRET=your-app-secret
 ```
+
+**Note**: The `OLLAMA_APP_KEY` and `OLLAMA_APP_SECRET` environment variables are used when fetching bearer tokens from a token URL. These credentials are sent as `X-App-Key` and `X-App-Secret` headers respectively when making token requests.
 
 #### CLI Commands
 

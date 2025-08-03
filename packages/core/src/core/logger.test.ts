@@ -21,29 +21,29 @@ import { Content } from '@google/genai';
 import crypto from 'node:crypto';
 import os from 'node:os';
 
-const LLXPRT_DIR_NAME = '.llxprt';
+const LLXPRT_DIR_NAME = '.prodigy';
 const TMP_DIR_NAME = 'tmp';
 const LOG_FILE_NAME = 'logs.json';
 const CHECKPOINT_FILE_NAME = 'checkpoint.json';
 
 const projectDir = process.cwd();
 const hash = crypto.createHash('sha256').update(projectDir).digest('hex');
-const TEST_LLXPRT_DIR = path.join(
+const TEST_PRODIGY_DIR = path.join(
   os.homedir(),
   LLXPRT_DIR_NAME,
   TMP_DIR_NAME,
   hash,
 );
 
-const TEST_LOG_FILE_PATH = path.join(TEST_LLXPRT_DIR, LOG_FILE_NAME);
+const TEST_LOG_FILE_PATH = path.join(TEST_PRODIGY_DIR, LOG_FILE_NAME);
 const TEST_CHECKPOINT_FILE_PATH = path.join(
-  TEST_LLXPRT_DIR,
+  TEST_PRODIGY_DIR,
   CHECKPOINT_FILE_NAME,
 );
 
 async function cleanupLogAndCheckpointFiles() {
   try {
-    await fs.rm(TEST_LLXPRT_DIR, { recursive: true, force: true });
+    await fs.rm(TEST_PRODIGY_DIR, { recursive: true, force: true });
   } catch (_error) {
     // Ignore errors, as the directory may not exist, which is fine.
   }
@@ -76,7 +76,7 @@ describe('Logger', () => {
     // Clean up before the test
     await cleanupLogAndCheckpointFiles();
     // Ensure the directory exists for the test
-    await fs.mkdir(TEST_LLXPRT_DIR, { recursive: true });
+    await fs.mkdir(TEST_PRODIGY_DIR, { recursive: true });
     logger = new Logger(testSessionId);
     await logger.initialize();
   });
@@ -99,7 +99,7 @@ describe('Logger', () => {
   describe('initialize', () => {
     it('should create .llxprt directory and an empty log file if none exist', async () => {
       const dirExists = await fs
-        .access(TEST_LLXPRT_DIR)
+        .access(TEST_PRODIGY_DIR)
         .then(() => true)
         .catch(() => false);
       expect(dirExists).toBe(true);
@@ -199,7 +199,7 @@ describe('Logger', () => {
       );
       const logContent = await readLogFile();
       expect(logContent).toEqual([]);
-      const dirContents = await fs.readdir(TEST_LLXPRT_DIR);
+      const dirContents = await fs.readdir(TEST_PRODIGY_DIR);
       expect(
         dirContents.some(
           (f) =>
@@ -226,7 +226,7 @@ describe('Logger', () => {
       );
       const logContent = await readLogFile();
       expect(logContent).toEqual([]);
-      const dirContents = await fs.readdir(TEST_LLXPRT_DIR);
+      const dirContents = await fs.readdir(TEST_PRODIGY_DIR);
       expect(
         dirContents.some(
           (f) =>
@@ -401,7 +401,7 @@ describe('Logger', () => {
     ])('should save a checkpoint', async ({ tag, sanitizedTag }) => {
       await logger.saveCheckpoint(conversation, tag);
       const taggedFilePath = path.join(
-        TEST_LLXPRT_DIR,
+        TEST_PRODIGY_DIR,
         `checkpoint-${sanitizedTag}.json`,
       );
       const fileContent = await fs.readFile(taggedFilePath, 'utf-8');
@@ -448,7 +448,7 @@ describe('Logger', () => {
         { role: 'user', parts: [{ text: 'hello' }] },
       ];
       const taggedFilePath = path.join(
-        TEST_LLXPRT_DIR,
+        TEST_PRODIGY_DIR,
         `checkpoint-${sanitizedTag}.json`,
       );
       await fs.writeFile(
@@ -474,7 +474,7 @@ describe('Logger', () => {
     it('should return an empty array if the file contains invalid JSON', async () => {
       const tag = 'invalid-json-tag';
       const taggedFilePath = path.join(
-        TEST_LLXPRT_DIR,
+        TEST_PRODIGY_DIR,
         `checkpoint-${tag}.json`,
       );
       await fs.writeFile(taggedFilePath, 'invalid json');
@@ -511,7 +511,7 @@ describe('Logger', () => {
     let taggedFilePath: string;
 
     beforeEach(async () => {
-      taggedFilePath = path.join(TEST_LLXPRT_DIR, `checkpoint-${tag}.json`);
+      taggedFilePath = path.join(TEST_PRODIGY_DIR, `checkpoint-${tag}.json`);
       // Create a file to be deleted
       await fs.writeFile(taggedFilePath, JSON.stringify(conversation));
     });

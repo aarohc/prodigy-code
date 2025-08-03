@@ -225,7 +225,7 @@ describe('MemoryTool', () => {
 
       expect(performAddMemoryEntrySpy).toHaveBeenCalledWith(
         params.fact,
-        expectedFilePath,
+        '/mock/home/.prodigy/PRODIGY.md',
         expectedFsArgument,
       );
       const successMessage = `Okay, I've remembered that: "${params.fact}"`;
@@ -290,11 +290,11 @@ describe('MemoryTool', () => {
       expect(result).not.toBe(false);
 
       if (result && result.type === 'edit') {
-        const expectedPath = path.join('~', '.llxprt', 'LLXPRT.md');
+        const expectedPath = path.join('~', '.prodigy', 'PRODIGY.md');
         expect(result.title).toBe(`Confirm Memory Save: ${expectedPath}`);
-        expect(result.fileName).toContain(path.join('mock', 'home', '.llxprt'));
-        expect(result.fileName).toContain('LLXPRT.md');
-        expect(result.fileDiff).toContain('Index: LLXPRT.md');
+        expect(result.fileName).toContain(path.join('mock', 'home', '.prodigy'));
+        expect(result.fileName).toContain('PRODIGY.md');
+        expect(result.fileDiff).toContain('Index: PRODIGY.md');
         expect(result.fileDiff).toContain('+## Gemini Added Memories');
         expect(result.fileDiff).toContain('+- Test fact');
         expect(result.originalContent).toBe('');
@@ -307,7 +307,7 @@ describe('MemoryTool', () => {
       const params = { fact: 'Test fact' };
       const memoryFilePath = path.join(
         os.homedir(),
-        '.llxprt',
+        '.prodigy',
         getCurrentLlxprtMdFilename(),
       );
 
@@ -404,9 +404,9 @@ describe('MemoryTool', () => {
       expect(result).not.toBe(false);
 
       if (result && result.type === 'edit') {
-        const expectedPath = path.join('~', '.llxprt', 'LLXPRT.md');
+        const expectedPath = path.join('~', '.prodigy', 'PRODIGY.md');
         expect(result.title).toBe(`Confirm Memory Save: ${expectedPath}`);
-        expect(result.fileDiff).toContain('Index: LLXPRT.md');
+        expect(result.fileDiff).toContain('Index: PRODIGY.md');
         expect(result.fileDiff).toContain('+- New fact');
         expect(result.originalContent).toBe(existingContent);
         expect(result.newContent).toContain('- Old fact');

@@ -130,13 +130,26 @@ export function getProviderManager(config?: Config): ProviderManager {
       // Initialize Ollama provider
       const ollamaBaseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
       const ollamaApiKey = process.env.OLLAMA_API_KEY;
+      const ollamaAppKey = process.env.OLLAMA_APP_KEY;
+      const ollamaAppSecret = process.env.OLLAMA_APP_SECRET;
       if (process.env.DEBUG || process.env.VERBOSE) {
         console.log('[ProviderManager] Initializing Ollama provider with:', {
           baseUrl: ollamaBaseUrl,
           hasApiKey: !!ollamaApiKey,
+          hasAppKey: !!ollamaAppKey,
+          hasAppSecret: !!ollamaAppSecret,
         });
       }
       const ollamaProvider = new OllamaProvider(ollamaBaseUrl, userSettings, ollamaApiKey);
+      
+      // Set app key and secret if available
+      if (ollamaAppKey) {
+        ollamaProvider.setAppKey(ollamaAppKey);
+      }
+      if (ollamaAppSecret) {
+        ollamaProvider.setAppSecret(ollamaAppSecret);
+      }
+      
       providerManagerInstance.registerProvider(ollamaProvider);
       // Ollama provider registered
     }
