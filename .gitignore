@@ -1,0 +1,113 @@
+
+# API keys and secrets
+.env
+.env~
+
+# gemini-cli settings
+.gemini/
+!gemini/config.yaml
+
+# Note: .gemini-clipboard/ is NOT in gitignore so Gemini can access pasted images
+
+# Dependency directory
+node_modules
+bower_components
+
+# Editors
+.idea
+*.iml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# TypeScript build info files
+*.tsbuildinfo
+
+# Ignore built ts files
+dist
+
+# Docker folder to help skip auth refreshes
+.docker
+
+bundle
+
+# Test report files
+junit.xml
+junit.*.xml
+packages/*/coverage/
+
+# NPM package tarballs
+*.tgz
+
+# Generated package files
+prodigy-cli-*.tgz
+prodigy-code-*.zip
+vybestack-llxprt-code-*.tgz
+
+# Generated files
+packages/cli/src/generated/
+.integration-tests/
+
+# Added by Gemini
+reports/
+prompts/
+
+# Reference directory
+reference/
+research/
+
+# VSCode extension packages
+packages/vscode-ide-companion/*.vsix
+tmp/
+
+# Temporary installation directories
+.temp-install/
+prodigy-test/
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env.test
+.env.production
